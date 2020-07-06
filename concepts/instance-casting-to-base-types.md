@@ -11,10 +11,10 @@ To inform PHP what to do when an instance is assumed to be a string, there is th
 ```php
 class _String
 {
-	public function __toString()
-	{
-		return "Hello, World!";
-	}
+  public function __toString()
+  {
+	return "Hello, World!";
+  }
 }
 
 $instance = new _String();
@@ -55,23 +55,23 @@ Of the eight remaining, two can be integrated into common PHP syntax by way of m
 ```php
 class MyType
 {
-	public function __toString()
-	{
-		return "Hello, World!";
-	}
+  public function __toString()
+  {
+	return "Hello, World!";
+  }
 
-	public function __invoke()
-	{
-		$string = (string) $this;
-		return "Invoked: {$string}";
-	}
+  public function __invoke()
+  {
+	$string = (string) $this;
+	return "Invoked: {$string}";
+  }
 
-	public function __debugInfo()
-	{
-		return [
-			"output" => "Debugged + {$this()}"
-		];
-	}
+  public function __debugInfo()
+  {
+	return [
+		"output" => "Debugged + {$this()}"
+	];
+  }
 }
 
 $instance = new MyType();
