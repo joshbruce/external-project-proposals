@@ -13,7 +13,7 @@ class _String
 {
   public function __toString()
   {
-	return "Hello, World!";
+    return "Hello, World!";
   }
 }
 
@@ -57,20 +57,20 @@ class MyType
 {
   public function __toString()
   {
-	return "Hello, World!";
+    return "Hello, World!";
   }
 
   public function __invoke()
   {
-	$string = (string) $this;
-	return "Invoked: {$string}";
+    $string = (string) $this;
+    return "Invoked: {$string}";
   }
 
   public function __debugInfo()
   {
-	return [
-		"output" => "Debugged + {$this()}"
-	];
+    return [
+      "output" => "Debugged + {$this()}"
+    ];
   }
 }
 
