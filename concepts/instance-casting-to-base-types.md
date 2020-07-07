@@ -1,12 +1,8 @@
-"cast" or "type juggle" I'm not sure are the most technically correct terms for the [concept]. The [concept] is:
-
-> The ability to use developer-defined instances as if they were PHP primitives, at least in the syntax of PHP.
-
 # Introduction
 
-PHP affords developers to integrate their custom objects (classes) seamlessly into the PHP syntax in multiple ways.
+For our purposes, we are not talking about converting an instance into a primitize that can then be acted upon. Rather, we are talking about giving developers a way to let developers interact with instances as if they were native PHP primitives directly.
 
-To inform PHP what to do when an instance is assumed to be a string, there is the `__toString()` magic method.
+PHP affords developers the means to do this already with many primitive types. For example, to give PHP a way to interact with an instance of a custom object where the inferred typ is `string` developers implement the `__toString()` magic method.
 
 ```php
 class _String
@@ -24,7 +20,7 @@ print $instance;
 // output: Hello, World!
 ```
 
-For array access, there is the `ArrayAccess` interface methods (not shown), which allows internal value to be defined in the class and retrieved using array syntax: `$instance["hello"]` or `$instance[0]`. In the case of at least the `string` base type, this capability is native (using the codebase above).
+For array access, there is the `ArrayAccess` interface and methods (shown below), which allows internal values to be defined in the class and retrieved using array syntax: `$instance["hello"]` or `$instance[0]`. In the case of at least the `string` primitive, this capability is baked in.
 
 ```php
 $instance = new _String();
@@ -38,15 +34,17 @@ print $string[0];
 
 This [concept] would expand this capability and give more flexibility to developers.
 
-## Benefits of specifying results of juggling to a base type
+## Benefits
 
-As developers use more libraries and leverage multiple classes (a developer-defined type), the chances of a variable ends up in a position wherein a `TypeError` can occur increases. By allowing developers to define their intended results could reduce these types of errors.
+As developers use more packages and those packages leverage multiple classes, the chances a variable will end up in a position where a `TypeError` can occur increases. These type errors could reduce as developers define a rational default that won't cause a fatal error on the other side.
 
-Developers can also generate language extensions that integrate seamlessly into the PHP syntax without having to write and install extensions or compilers - especially in shared hosting and similar environments may not be permitted. These language extensions can then be matured and possibly become the groundwork for future RFC submissions to improve PHP as a whole. (ex. Think of some JavaScript library functions that become part of Javascript, the become part of CSS or HTML.)
+Developers can also generate packages that act as language extensions and integrate seamlessly into the PHP syntax without having to write and install extensions or compilers - especially in shared hosting and similar environments may not be permitted. As these language extensions mature they may lay the groundwork for future RFC submissions to improve PHP as a whole. (ex. Think of some JavaScript library functions that became part of Javascript, then became part of CSS or HTML.)
 
 ## Base types and scope
 
-10 PHP primitive types and how developer-defined instances can be made to integrate and interact with inside the PHP syntax. Two can be immediately removed from consideration as one (`resource`) doesn't seem to be a common use case and the second (`NULL`) is always NULL, and an instance shouldn't need to specify how to become NULL.
+There are 10 PHP primitives that can become interacted with using the native PHP syntax. 
+
+Two can be immediately removed from consideration as one (`resource`) doesn't seem to be a common use case and the second (`NULL`) is always NULL, and an instance shouldn't need to specify how to return from a NULL check, if it can return something, it shouldn't be NULL.
 
 ### Available as of PHP 7
 
@@ -322,3 +320,7 @@ interface [UsableAs]Array implements \ArrayAccess, \Iterator
 ```
 
 Haven't given much thought to the others. Most valuable to me would be the `UsableAsBool`.
+
+## See also
+
+[PHP RFC:__toArray()](https://wiki.php.net/rfc/to-array)
