@@ -70,7 +70,7 @@ if (! $instance) {
 The interface version looks similar, but includes the added step of explicitly attaching the interface to the class definition. This should also allow developers to leverage the PHP type system to determine if a given class conforms to the interface.
 
 ```php
-interface BoolAcces
+interface BoolAccess
 {
   public function toBool(): bool;
 }
