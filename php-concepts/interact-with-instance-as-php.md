@@ -75,7 +75,7 @@ interface BoolAcces
   public function toBool(): bool;
 }
 
-class MyBool implements BoolAcces
+class MyBool implements BoolAccess
 {
   public function toBool(): bool
   {
