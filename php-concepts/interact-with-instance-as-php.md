@@ -89,7 +89,7 @@ if (! $instance) {
 }
 ```
 
-Depending on the use case, the need for creating calculated properties or methods returning boolean values becomes moot, and the resulting code feels cleaner.
+Depending on the use case, the need for creating calculated properties or methods returning boolean values becomes moot, and the resulting call site code feels cleaner.
 
 For the sake of comparison, without this capability, the previous example would need to look something like this.
 
