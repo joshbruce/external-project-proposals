@@ -262,5 +262,5 @@ while($instance) {
 
 ## See also
 
-[PHP RFC:__toArray()](https://wiki.php.net/rfc/to-array)
-[PHP RFC: Userspace operator overloading](https://wiki.php.net/rfc/userspace_operator_overloading)
+- [PHP RFC:__toArray()](https://wiki.php.net/rfc/to-array)
+- [PHP RFC: Userspace operator overloading](https://wiki.php.net/rfc/userspace_operator_overloading)
