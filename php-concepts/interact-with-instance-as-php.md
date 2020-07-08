@@ -264,6 +264,7 @@ while($instance) {
 
 ## See also
 
+The following RFCs are identified as similar in spirit to this [concept], possibly helped by this [concept], or this [concept] is potentially helped by the result of the linked RFC.
 - [PHP RFC:__toArray()](https://wiki.php.net/rfc/to-array)
 - [PHP RFC: Pipe Operator v2](https://wiki.php.net/rfc/pipe-operator-v2)
 - [PHP RFC: Userspace operator overloading](https://wiki.php.net/rfc/userspace_operator_overloading)
