@@ -22,7 +22,7 @@ The magic method for defining a `boolean` value for an instance might look somet
 class MyBool
 {
   public function __toBool()
-  {t
+  {
     return false;
   }
 }
