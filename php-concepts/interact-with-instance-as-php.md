@@ -1,4 +1,4 @@
-Help wanted: As it stands, I do not have the working knowledge or practice to feel comfortable doing the implementation alone. Please do reach out if you'd be interested on (helping) implement this concept. (After the RFC process and clearly defining what's being done.)
+Help wanted: As it stands, I do not have the working knowledge or practice to feel comfortable doing the implementation alone. Please do reach out if you'd be interested on (helping) implement this concept (could be answering my questions and teaching me). (After the RFC process and clearly defining what's being done.)
 
 Feedback: Primarily please do you the PHP internals list; otherwise, feel free to submit an issue here. Thank you!
 
