@@ -1,3 +1,5 @@
+Help wanted: As it stands, I do not have the working knowledge or practice to feel comfortable doing the implementation alone. Please do reach out if you'd be interested on (helping) implement this concept. (After the RFC process and clearly defining what's being done.)
+
 # Introduction
 
 This [concept] allows an instance of a custom object to define a default boolean value, both `true` and `false`. At present, PHP treats any set instance as `true` with no way to return `false` without explicit request by the developer.
