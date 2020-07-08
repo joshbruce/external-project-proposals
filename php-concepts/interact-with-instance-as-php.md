@@ -68,7 +68,7 @@ if (! $instance) {
 
 The interface version looks similar, but includes the added step of explicitly attaching the interface to the class definition. 
 
-When passing an instance as an argument to a function or method the PHP type system should facilitate type safety without the added complexity or development required by a magic method implementation (??). I am not sure which would easier to implement when it comes to this concept: union types, available as of PHP 8, may help facilitate.
+When passing an instance as an argument to a function or method the PHP type system should facilitate type safety without the added complexity or development required by a magic method implementation (??). I am not sure which would be easier to implement when it comes to this concept: union types, available as of PHP 8, may help facilitate.
 
 ```php
 interface BoolAccess
@@ -124,7 +124,7 @@ Second, we explicitly call the method by way of added syntax. If the `BoolAccess
 
 ## Personal use
 
-Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance determine its own boolean value and return that value, with no extra steps from me, means I, as the developer, don't need to maintain as much knowledge about the class and could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
+Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance determine its own boolean value and return that value, with no extra steps from me, means I, as the developer, don't need to maintain as much knowledge about the class (property and method names) and could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
 
 ```php
 class MySomething
