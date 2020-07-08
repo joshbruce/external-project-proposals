@@ -2,7 +2,7 @@
 
 This [concept] allows an instance of a custom object to define a default boolean value, both `true` and `false`. At present, PHP treats any set instance as `true` with no way to return `false`.
 
-```php
+```php 
 class MyBool
 {}
 
@@ -68,7 +68,7 @@ if (! $instance) {
 
 The interface version looks similar, but includes the added step of explicitly attaching the interface to the class definition. 
 
-When passing an instance as an argument to a function or method the standard PHP type should be able allow for type safety without added complexity or development potentially required by a magic method implementation. I am not sure which would easier to implement when it comes to this concept: union types may help facilitate.
+When passing an instance as an argument to a function or method the PHP type system should facilitate type safety without the added complexity or development required by a magic method implementation (??). I am not sure which would easier to implement when it comes to this concept: union types, available as of PHP 8, may help facilitate.
 
 ```php
 interface BoolAccess
@@ -90,10 +90,7 @@ if (! $instance) {
   print "BoolAcces interface method returns false";
 }
 ```
-
-Depending on the use case, the need for creating calculated properties or methods returning boolean values becomes moot, and the resulting call site code feels cleaner.
-
-For the sake of comparison, without this capability, the previous example would need to look something like this.
+For the sake of comparison, without this capability, the previous example might look like this.
 
 ```php
 interface BoolAcces
@@ -113,17 +110,21 @@ $instance = new MyBool();
 
 if ($instance instanceof BoolAcces) {
   print "Instance implements BoolAcces";
+
   if (! $instance->toBool()) {
     print "BoolAcces interface method returns false";
+
   }
 }
 ```
 
-First we ensure the method is implemented (if implemented this could be inferred by PHP). Then we explicitly call the method by way of added syntax. If the `BoolAccess` interface is not implemented in this scenario, the same PHP Error we use now would be displayed.
+First, we ensure the method is implemented (this check could be performed by PHP). 
+
+Second, we explicitly call the method by way of added syntax. If the `BoolAccess` interface is not implemented in this scenario, the same PHP Error we use now would be displayed.
 
 ## Personal use
 
-Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance to determine its own default boolean value and return its own calculated value, with no extra steps from me, could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
+Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance determine its own boolean value and return that value, with no extra steps from me, means I, as the developer, don't need to maintain as much knowledge about the class and could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
 
 ```php
 class MySomething
@@ -157,7 +158,7 @@ while($instance->toBool()) {
 // output: 0 1 2 3 4 5 6 7 8 9 10
 ```
 
-Of course, we can use `__toString` to remove one of the method calls.
+We can use `__toString` to remove one of the method calls.
 
 ```php
 class MySomething
@@ -191,7 +192,7 @@ while($instance->toBool()) {
 // output: 0 1 2 3 4 5 6 7 8 9 10
 ```
 
-We can move the `increment` call to happen every time the instance is printed; cleaning up the call site even more and making `MySomething` a bit more aware of itself and context.
+We can move the `increment` call to happen every time the instance is printed; cleaning up the call site even more and making `MySomething` a bit more self-aware, self-managing, and context-aware.
 
 ```php
 class MySomething
