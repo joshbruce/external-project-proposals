@@ -1,6 +1,6 @@
 # Introduction
 
-This [concept] allows an instance of a custom object to define a default boolean value, both `true` and `false`. At present, PHP treats any set instance as `true` with no way to return `false`.
+This [concept] allows an instance of a custom object to define a default boolean value, both `true` and `false`. At present, PHP treats any set instance as `true` with no way to return `false` without explicit request by the developer.
 
 ```php 
 class MyBool
