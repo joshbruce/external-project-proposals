@@ -1,6 +1,6 @@
 # Introduction
 
-This [concept] seeks to implement a for an instance of custom object to be understood as a boolean value, both positive and negative. At present, it appears that PHP will treat any set instance as `true` with no way to return false.
+This [concept] allows an instance of a custom object to define a default boolean value, both `true` and `false`. At present, PHP treats any set instance as `true` with no way to return `false`.
 
 ```php
 class MyBool
@@ -15,15 +15,14 @@ if ($instance) {
 }
 ```
 
-There are two ways to do this that PHP already takes advantage of. The first is magic methods. The second is interfaces that are adopted and the methods implemented.
-
+There are two precedents already established for implementing such an affordance: a magic method, an interface, or both.
 The magic method for defining a `boolean` value for an instance might look something like this.
 
 ```php
 class MyBool
 {
   public function __toBool()
-  {
+  {t
     return false;
   }
 }
@@ -67,7 +66,9 @@ if (! $instance) {
 }
 ```
 
-The interface version looks similar, but includes the added step of explicitly attaching the interface to the class definition. This should also allow developers to leverage the PHP type system to determine if a given class conforms to the interface.
+The interface version looks similar, but includes the added step of explicitly attaching the interface to the class definition. 
+
+When passing an instance as an argument to a function or method the standard PHP type should be able allow for type safety without added complexity or development potentially required by a magic method implementation. I am not sure which would easier to implement when it comes to this concept: union types may help facilitate.
 
 ```php
 interface BoolAccess
@@ -111,18 +112,18 @@ class MyBool implements BoolAcces
 $instance = new MyBool();
 
 if ($instance instanceof BoolAcces) {
-  print "Instance implement BoolAcces";
+  print "Instance implements BoolAcces";
   if (! $instance->toBool()) {
     print "BoolAcces interface method returns false";
   }
 }
 ```
 
-The first conditional is required to ensure the method is implemented (could be inferred by PHP). Then we must explicitly call the method by way of added syntax. If the `BoolAccess` interface is not implemented, the same PHP Error we use now would be displayed.
+First we ensure the method is implemented (if implemented this could be inferred by PHP). Then we explicitly call the method by way of added syntax. If the `BoolAccess` interface is not implemented in this scenario, the same PHP Error we use now would be displayed.
 
 ## Personal use
 
-Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Having the ability to determine its own default boolean value and return the value with no extra steps from me, could allow something like the following (again, totally contrived and not useful - maybe I'll look through my code for simple live examples).
+Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance to determine its own default boolean value and return its own calculated value, with no extra steps from me, could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
 
 ```php
 class MySomething
@@ -190,7 +191,7 @@ while($instance->toBool()) {
 // output: 0 1 2 3 4 5 6 7 8 9 10
 ```
 
-We can move the `increment` call to happen every time the instance is printed; cleaning up the call site even more.
+We can move the `increment` call to happen every time the instance is printed; cleaning up the call site even more and making `MySomething` a bit more aware of itself and context.
 
 ```php
 class MySomething
@@ -225,7 +226,7 @@ while($instance->toBool()) {
 // output: 0 1 2 3 4 5 6 7 8 9 10
 ```
 
-Using the proposed `BoolAccess` interface to clean up just a bit more.
+Next we'll use the proposed `BoolAccess` interface to clean up just a bit more.
 
 ```php
 class MySomething implements BoolAccess
@@ -264,3 +265,4 @@ while($instance) {
 
 - [PHP RFC:__toArray()](https://wiki.php.net/rfc/to-array)
 - [PHP RFC: Userspace operator overloading](https://wiki.php.net/rfc/userspace_operator_overloading)
+- (approved for PHP 8) [PHP RFC: Union Types 2.0](https://wiki.php.net/rfc/union_types_v2)
