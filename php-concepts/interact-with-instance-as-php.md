@@ -124,7 +124,7 @@ Second, we explicitly call the method by way of added syntax. If the `BoolAccess
 
 ## Personal use
 
-Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance determine its own boolean value and return that value, with no extra steps from me, means I, as the developer, don't need to maintain as much knowledge about the class (property and method names) and could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
+Calling a method that returns a `bool` that is the result of some calculation is something I do quite often. Being able to let the instance determine its own boolean value and return that value, with no extra steps from me (or additional syntax), means I, as the developer, don't need to maintain as much knowledge about the class (property and method names) and could allow something like the following (again, totally contrived and not very practical - maybe I'll look through my code for simple live examples).
 
 ```php
 class MySomething
