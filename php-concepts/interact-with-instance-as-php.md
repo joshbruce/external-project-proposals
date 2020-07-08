@@ -265,4 +265,5 @@ while($instance) {
 
 - [PHP RFC:__toArray()](https://wiki.php.net/rfc/to-array)
 - [PHP RFC: Userspace operator overloading](https://wiki.php.net/rfc/userspace_operator_overloading)
+- [PHP RFC: Union Types 2.0](https://wiki.php.net/rfc/pipe-operator-v2)
 - (approved for PHP 8) [PHP RFC: Union Types 2.0](https://wiki.php.net/rfc/union_types_v2)
