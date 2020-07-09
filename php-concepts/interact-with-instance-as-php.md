@@ -21,19 +21,19 @@ This [concept] introduces a new `__toBool()` method and `BoolAccess` interface, 
 
 It has # goals:
 
-1. provide single method implementation by way of the `__toBool()` method, without explictly adding the BoolAccess interface to the class definition,
+1. provide single method implementation by way of the `__toBool()` method, without explictly adding the `BoolAccess` interface to the class definition,
 2. allow `bool|BoolAccess` to express `bool|object-with-__toBool()`, and
 3. no BC breaks (no polyfill is planned at this time).
 
 ## Introduction
 
-Goal 1: To maintain consistency within PHP this [concept] recognizes the existence of the `__toString()`, which allows class developers to create objects that can be seamlessly treated as a string. Further, this [concept] is in keeping with the ideas and motives behind the `Stringable` interface.[^1] Therefore, the following signature is proposed for the `__toBool()` method:
+Goal 1: To maintain consistency within PHP this [concept] recognizes the existence of the `__toString()` method, which allows class developers to create objects that can be seamlessly treated as a string. Further, this [concept] is in keeping with the ideas and motives behind the `Stringable` interface.[^1] Therefore, the following signature is proposed for the `__toBool()` method:
 
 ```php
 public function __toBool(): bool
 ```
 
-This also maintains consistency within PHP should the `__toArray()` method be approved, which further indicates an established desire for the idea of custom objects being converted to base primitives.[^2]
+This also maintains consistency within PHP should the `__toArray()` method be approved, which further indicates an established desire to convert to (or otherwise interact with custom objects using) base primitive syntax.[^2]
 
 Goal 2: Forward compatibility for type safety and consistency in implementation are maintained through implicent declaration of the interface while also allowing explicit declaration as well using the `bool|Boolaccess` union type.[^1]
 
