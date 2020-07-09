@@ -17,7 +17,7 @@ Please feel free to add more.
 
 ***
 
-This [concept] instroduces a new `__toBool()` method and `BoolAccess` interface, which is automatically added to classes implementing the `__toBool()` method.
+This [concept] introduces a new `__toBool()` method and `BoolAccess` interface, which is automatically added to classes implementing the `__toBool()` method.
 
 It has # goals:
 
