@@ -27,13 +27,13 @@ It has # goals:
 
 ## Introduction
 
-Goal 1: To maintain consistency within PHP this [concept] recognizes the existence of the `__toString()`, which allows class developers to create objects that can be seamlessly treated as a string. Further, this [concept] is in keeping with the ideas and motives behind the `Stringable` interface.[^1] Therefore, the following signature for the proposed `__toBool()` method:
+Goal 1: To maintain consistency within PHP this [concept] recognizes the existence of the `__toString()`, which allows class developers to create objects that can be seamlessly treated as a string. Further, this [concept] is in keeping with the ideas and motives behind the `Stringable` interface.[^1] Therefore, the following signature is proposed for the `__toBool()` method:
 
 ```php
 public function __toBool(): bool
 ```
 
-This will also to maintain consistency within PHP should the `__toArray()` method approved, which further indicates an established mental conversion for the idea of custom objects being converted to base primitives.
+This also maintains consistency within PHP should the `__toArray()` method be approved, which further indicates an established desire for the idea of custom objects being converted to base primitives.[^2]
 
 Goal 2: Forward compatibility for type safety and consistency in implementation are maintained through implicent declaration of the interface while also allowing explicit declaration as well using the `bool|Boolaccess` union type.[^1]
 
@@ -48,11 +48,11 @@ interface BoolAccess
 
 By explicitly adding the `bool` return type in the implentation, there should be no need to do so at compile time. This will be a point of differentiation with `__toString()` as its declaration doesn't require the existence of a return type.
 
-Goal 3: As this functionality current does not exist, there should be no methods "in the wild" with the same signature, as long as the guidance on naming from the PHP documentation has been followed. (Really want to flesh this out, but don't know any other hinderences to this.)
+Goal 3: As this functionality does not exist currently, there should be no methods "in the wild" with the same signature, as long as the guidance on naming from the PHP documentation has been followed. (Really want to flesh this out, but don't know any other hinderences at this time.)
 
 ## Production Code Samples
 
-These code samples could benefit from the availability of this capability. As there is no polyfill or installable extension, they are not live examples of this capability. (As of this writing they are not, as promised, code samples from a production implementations...still gathering.)
+These code samples could benefit from the availability of this capability. As there is no polyfill or installable extension, they are not live examples of this capability. (As of this writing they are not, as promised, code samples from production implementations...still gathering.)
 
 Class declaraction with cast:
 
@@ -196,7 +196,7 @@ class MySomething implements Stringable, BoolAccess
     return $string;
   }
 
-  public function toBool()
+  public function __toBool()
   {
     return $this->value <= 10;
   }
