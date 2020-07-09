@@ -1,8 +1,4 @@
-Help wanted: As it stands, I do not have the working knowledge or practice to feel comfortable doing the implementation alone. Please do reach out if you'd be interested on (helping) implement this concept (could be answering my questions and teaching me). (After the RFC process and clearly defining what's being done.)
-
-Feedback: Primarily please do use the PHP internals list; otherwise, feel free to submit an issue here. Thank you!
-
-Fair warning: This is my first time, apologies for the bumps.
+Help wanted: RFC submission and implementation.
 
 As of this writing I do not believe I have the [karma points](https://wiki.php.net/rfc/howto) (step 2) required to submit an RFC myself.
 
@@ -21,7 +17,7 @@ Please feel free to add more.
 
 ***
 
-This [concept] instroduces a new `__toBool()` method and `BoolAccess` interface, which is automatically added to classes implementing the `__toBool()` method.
+This [concept] introduces a new `__toBool()` method and `BoolAccess` interface, which is automatically added to classes implementing the `__toBool()` method.
 
 It has # goals:
 
