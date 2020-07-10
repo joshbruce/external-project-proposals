@@ -62,7 +62,29 @@ Goal 3: As this functionality does not exist currently, there should be no metho
 
 ## Usage
 
-`__toBool()` only:
+Status quote on casting for base primitives:
+
+```php
+$bool = (bool) "Hello"; // true
+
+$bool = (bool) ""; // false
+
+$bool = (bool) [1, 2, 3]; // true
+
+$bool = (bool) []; // false
+
+$bool = (bool) 1; // true
+
+$bool = (bool) -1; // true
+
+$bool = (bool) 0; // false
+
+$bool = (bool) new \stdClass(); // true
+
+// There is no false variant for an object instant.
+```
+
+Class using `__toBool()` only:
 
 ```php
 class MyClass
