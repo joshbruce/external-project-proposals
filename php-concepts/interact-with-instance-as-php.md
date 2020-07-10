@@ -62,7 +62,7 @@ Goal 3: As this functionality does not exist currently, there should be no metho
 
 ## Usage
 
-Status quote on casting for base primitives:
+Status quo on casting for base primitives:
 
 ```php
 $bool = (bool) "Hello"; // true
