@@ -6,9 +6,19 @@ As of this writing I do not have the knowledge, practice, and practical understa
 
 (After the RFC process and clearly defining what's being done.)
 
+**Perceived roadblocks**
+
+I have tried multiple times to regisster to the wiki per [the form](https://wiki.php.net/start?do=register). The error message received is not detailed enough and I'm not sure who to contact - the error message reads:
+
+> That wasn't the answer we were expecting
+
+I've tried multiple usernames in case that was the problem. I've an @gmail.com address and multiple self hosted email addresses. 
+
+Any assistance would be greatly appreciated.
+
 **Known questions and concerns still outstanding:**
 
-- The drawbacks and potential complexity (or adding bugs) in implementing the cast capability.
+- ~The drawbacks and potential complexity (or adding bugs) in implementing the cast capability.~
 - Whether to use magic method only, interface only, or both (as of now, we are going with both to increase the potential for future consistency based on what is in PHP 8, and RFCs under review).
 - What to name the interface as it does not fit the *-able pattern well.
 - Rumors of magic methods going away - not from folks in the deep end of PHP development near as I can tell.
@@ -50,14 +60,12 @@ By explicitly adding the `bool` return type in the implentation, there should be
 
 Goal 3: As this functionality does not exist currently, there should be no methods "in the wild" with the same signature, as long as the guidance on naming from the PHP documentation has been followed. (Really want to flesh this out, but don't know any other hinderences at this time.)
 
-## Production Code Samples
+## Usage
 
-These code samples could benefit from the availability of this capability. As there is no polyfill or installable extension, they are not live examples of this capability. (As of this writing they are not, as promised, code samples from production implementations...still gathering.)
-
-Class declaraction with cast:
+`__toBool()` only:
 
 ```php
-class MySomething implements BoolAccess
+class MyClass
 {
   public function __toBool(): bool
   {
@@ -65,151 +73,264 @@ class MySomething implements BoolAccess
   }
 }
 
-$instance = new MySomething();
+$bool = (bool) (new MyClass()); // output: bool(false)
 
-$bool = (bool) $instance;
+if ((new MyClass())) {
+  // will NOT be reached
+}
 
-var_dump($bool);
-// output: bool(false)
+if (! (new MyClass())) {
+  // will be reached
+}
+
+if ($i = (new MyClass())) {
+  // will NOT be reached
+}
+
+if (! $i = (new MyClass())) {
+  // will be reached
+}
 ```
 
-Expanded sample (would work as expected as of PHP 8):
+Explicitly implementing the interface:
 
 ```php
-class MySomething implements BoolAccess
-{
-  private $value = 0;
-  
-  public function increment()
-  {
-    $this->value++;
-    return $this;
-  }
-
-  public function string()
-  {
-    return (string) $this->value;
-  }
-
-  public function toBool(): bool
-  {
-    return $this->value <= 10;
-  }
-}
-
-$instance = new MySomething();
-
-while($instance->toBool()) {
-  print $instance->string();
-  $instance->increment();
-}
-
-// output: 0 1 2 3 4 5 6 7 8 9 10
+class MyClass implements BoolAccess
+{}
 ```
 
-Adding `__toString()` with explicit declaration of `Stringable` (PHP 8+ compatible).
+## Rationale
+
+The following could be considered a rational implementation.
 
 ```php
-class MySomething implements Stringable, BoolAccess
+class MyClass
 {
-  private $value = 0;
-  
-  public function increment()
+  public function aFunction($return = true): ?string
   {
-    $this->value++;
-    return $this;
-  }
-
-  public function __toString()
-  {
-    return (string) $this->value;
-  }
-
-  public function toBool()
-  {
-    return $this->value <= 10;
+    if ($return) {
+      return "Hello, World!";
+    }
+    return null;
   }
 }
 
-$instance = new MySomething();
+$instance = new MyClass();
 
-while($instance->toBool()) {
-  print $instance;
-  $instance->increment();
+if ($instance->aFunction() !== null) {
+  print "Is true";
 }
 
-// output: 0 1 2 3 4 5 6 7 8 9 10
+if ($instance->aFunction(false) === null) {
+  print "Is false";
+}
 ```
 
-Tie the increment logic to the printing thereby making the instance a bit more self-aware, self-managing, and context-aware (PHP 8+ compatible).
+Some developers (including its inventor) view `null` as a necessary evil (if not a "billion dollar mistake"). Some developers return empty (read `false`) representations of the type in order to avoid returning something representative of nothing and maintaining stricter type safety.
 
 ```php
-class MySomething implements Stringable, BoolAccess
+class MyClass
 {
-  private $value = 0;
-  
-  public function increment()
+  public function aFunction($return = true): string
   {
-    $this->value++;
-    return $this;
-  }
-
-  public function __toString()
-  {
-    $string = (string) $this->value ." ";
-    $this->increment();
-    return $string;
-  }
-
-  public function toBool()
-  {
-    return $this->value <= 10;
+    if ($return) {
+      return "Hello, World!";
+    }
+    return "";
   }
 }
 
-$instance = new MySomething();
+$instance = new MyClass();
 
-while($instance->toBool()) {
-  print $instance;
+// Still wise to check (defensive)
+if (strlen($instance->aFunction()) > 0) {
+  print "Is true";
 }
 
-// output: 0 1 2 3 4 5 6 7 8 9 10
+if (strlen($instance->aFunction(false)) === 0) {
+  print "Is false";
+}
 ```
 
-Implementing the proposed `__toBool()` method and `BoolAccess` interface. (Unavailable in PHP.)
+The checks almost become boilerplate and can be seen throughout codebases.
+
+The following sample returns a custom object. At present there is no way to have a valid instance of an "empty" custom object (??) and tell PHP (at least not without calling a method on the object, which requires the developer to know more about the object's API). 
+
+In these cases, we often revert to using `null` - either the instance exists and is usable or it doesn't exist - nothing for the potential third option.
 
 ```php
-class MySomething implements Stringable, BoolAccess
-{
-  private $value = 0;
-  
-  public function increment()
-  {
-    $this->value++;
-    return $this;
-  }
+class MyOtherClass
+{}
 
-  public function __toString()
+class MyClass
+{
+  public function aFunction($return = true): ?MyOtherClass
   {
-    $string = (string) $this->value ." ";
-    $this->increment();
-    return $string;
+    if ($return) {
+      return new MyOtherClass();
+    }
+    return null;
+  }
+}
+
+$instance = new MyClass();
+
+// Null-checks
+if ($instance->aFunction() !== null) {
+  print "Is true";
+}
+
+if ($instance->aFunction(false) === null) {
+  print "Is false";
+}
+```
+
+An instantiated object always resolves to `true`; therefore, the method could return `false`, instead of `null`. 
+
+For this sample, it wouldn't matter as much as `null` (in PHP) resolves to `false`. However, explicitly returning `false` affords the developer debugging code to differentiate between something unusable and something that doesn't actually exist.
+
+```php
+class MyOtherClass
+{}
+
+class MyClass
+{
+  public function aFunction($return = true): ?MyOtherClass|bool
+  {
+    if ($return) {
+      return new MyOtherClass();
+    }
+
+    // Could return null - which resolves to false
+    return false;
+  }
+}
+
+$instance = new MyClass();
+
+if ($instance->aFunction()) {
+  print "Is true";
+}
+
+if (! $instance->aFunction(false)) {
+  print "Is false";
+}
+```
+
+For the previous sample we need to implement union types for the purposes of type safety, or use the optional flag (?), or both.
+
+Which raises the following questions:
+
+1. Why does the calling object need to know what's going on with the new instance (defensive)? 
+2. Why can't the new instance know, based on constuction arguments, what constitutes a usable state for itself beyond occupying memory or throwing exceptions (defensive)?
+
+```php
+class MyOtherClass
+{
+  private $bool = true;
+
+  public function __construct(bool $bool = true)
+  {
+    $this->bool = $bool;
   }
 
   public function __toBool()
   {
-    return $this->value <= 10;
+    return $this->bool;
   }
 }
 
-$instance = new MySomething();
+$castable = new MyOtherClass();
 
-while($instance) {
-  print $instance;
+$bool = (bool) $castable;
+
+var_dump($bool); // output: bool(true)
+
+class MyClass
+{
+  public function aFunction($return = true): MyOtherClass
+  {
+    return new MyOtherClass($return);
+  }
 }
 
-// output: 0 1 2 3 4 5 6 7 8 9 10
+$instance = new MyClass();
+
+if ($instance->aFunction()) {
+  print "Is true";
+}
+
+if ($instance->aFunction(false)) {
+  print "Is always true, because not null";
+}
+
+if (! $instance->aFunction(false)->__toBool()) {
+  print "Is false, would not have required method call.";
+}
 ```
+
+In the previous sample `MyOtherClass` is more self-aware. The `aFunction()` method returns one and only one type, which is never `null` unless an error occurs at instantiation.
+
+Declaring a variable inside a condition could be productive as well, though will add an unknown degree of complexity to the implementation.
+
+```php
+class MyOtherClass
+{
+  private $bool = true;
+
+  public function __construct(bool $bool = true)
+  {
+    $this->bool = $bool;
+  }
+
+  public function __toBool()
+  {
+    return $this->bool;
+  }
+
+  public function __toString()
+  {
+    return ($this->bool) ? "Hello, World!" : "To bool could be helpful";
+  }
+}
+
+class MyClass
+{
+  public function aFunction($return = true): MyOtherClass
+  {
+    return new MyOtherClass($return);
+  }
+}
+
+$instance = new MyClass();
+
+if ($i = $instance->aFunction()) {
+  print $i; // Hello, World!
+}
+
+// Without __toBool as part of PHP
+if (! $instance->aFunction(false)->__toBool() and $i = $instance->aFunction(false)) {
+    print $i; // To bool could be helpful
+}
+
+// Preferred with __toBool
+if (! $i = $instance->aFunction(false)) {
+    print $i; // To bool could be helpful
+}
+
+// And, we remove the need for `MyClass` - at least for this purpose
+if (! $i = (new MyOtherClass(false))) {
+  print $i; // To bool could be helpful
+}
+```
+
+Applying the Not operator would:
+
+1. call the instance method,
+2. if not `null` AND cast-able to bool, cast the return value to `bool` (otherwise, exit conditional)
+3. if `false` the return value is assigned to `$i`.
+
+This could be useful when triggering errors and similar guard operations while simultaneously reducing syntactic boilerplate.
 
 ## Backward Incompatible Changes
 
