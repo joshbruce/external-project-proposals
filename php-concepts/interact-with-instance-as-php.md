@@ -81,7 +81,7 @@ $bool = (bool) 0; // false
 
 $bool = (bool) new \stdClass(); // true
 
-// There is no false variant for an object instant.
+// There is no false variant for an object instance.
 ```
 
 Class using `__toBool()` only:
