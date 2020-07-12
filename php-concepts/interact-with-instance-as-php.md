@@ -1,3 +1,11 @@
+# MOVE NOTIFICATION
+
+This PHP concept has been moved:
+
+https://github.com/joshbruce/external-project-proposals/blob/master/php-concepts/php-0002.md
+
+***
+
 Help wanted: RFC submission and implementation.
 
 As of this writing I do not believe I have the [karma points](https://wiki.php.net/rfc/howto) (step 2) required to submit an RFC myself.
