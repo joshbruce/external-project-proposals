@@ -18,10 +18,10 @@ Any assistance would be greatly appreciated.
 
 **Known questions and concerns still outstanding:**
 
-- ~The drawbacks and potential complexity (or adding bugs) in implementing the cast capability.~
-- Whether to use magic method only, interface only, or both (as of now, we are going with both to increase the potential for future consistency based on what is in PHP 8, and RFCs under review).
 - What to name the interface as it does not fit the *-able pattern well.
-- Rumors of magic methods going away - not from folks in the deep end of PHP development near as I can tell.
+- ~The drawbacks and potential complexity (or adding bugs) in implementing the cast capability.~
+- ~Whether to use magic method only, interface only, or both (as of now, we are going with both to increase the potential for future consistency based on what is in PHP 8, and RFCs under review).~
+- ~Rumors of magic methods going away - not from folks in the deep end of PHP development near as I can tell.~
 
 Please feel free to add more.
 
@@ -37,17 +37,15 @@ It has # goals:
 
 ## Introduction
 
-Goal 1: To maintain consistency within PHP this [concept] recognizes the existence of the `__toString()`, which allows class developers to create objects that can be seamlessly treated as a string. Further, this [concept] is in keeping with the ideas and motives behind the `Stringable` interface.[^1] Therefore, the following signature is proposed for the `__toBool()` method:
+Goal 1: To maintain consistency within PHP this [concept] recognizes the existence of the `__toString()` method, which allows developers to create objects that can be seamlessly treated as a string. Further, this [concept] is in keeping with the ideas and motives behind the `Stringable` interface and other pending RFCs.[^1][^2] Therefore, the following signature is proposed for the `__toBool()` method:
 
 ```php
 public function __toBool(): bool
 ```
 
-This also maintains consistency within PHP should the `__toArray()` method be approved, which further indicates an established desire for the idea of custom objects being converted to base primitives.[^2]
+Goal 2: Forward compatibility for type safety and consistency in implementation are maintained through implicit declaration of the interface and allowing explicit declaration using the `bool|BoolAccess` union type annd adding the `BoolAccess` interface to the class declaraction.[^1]
 
-Goal 2: Forward compatibility for type safety and consistency in implementation are maintained through implicent declaration of the interface while also allowing explicit declaration as well using the `bool|Boolaccess` union type.[^1]
-
-Stub of the interface declaraction:
+Stub of the interface definition:
 
 ```php
 interface BoolAccess
@@ -56,9 +54,9 @@ interface BoolAccess
 }
 ```
 
-By explicitly adding the `bool` return type in the implentation, there should be no need to do so at compile time. This will be a point of differentiation with `__toString()` as its declaration doesn't require the existence of a return type.
+By explicitly adding the `bool` return type in the implentation, adding it at compile time should not be required. This is a differentiation point compared to the `__toString()` method, which doesn't declare or require a return type.
 
-Goal 3: As this functionality does not exist currently, there should be no methods "in the wild" with the same signature, as long as the guidance on naming from the PHP documentation has been followed. (Really want to flesh this out, but don't know any other hinderences at this time.)
+Goal 3: As this is a new language feature and PHP guidance reserves method or function names preceded by two underscores, there should be no backward compatibility issues or concerns.
 
 ## Usage
 
@@ -176,7 +174,7 @@ if (strlen($instance->aFunction(false)) === 0) {
 
 The checks almost become boilerplate and can be seen throughout codebases.
 
-The following sample returns a custom object. At present there is no way to have a valid instance of an "empty" custom object (??) and tell PHP (at least not without calling a method on the object, which requires the developer to know more about the object's API). 
+The following sample returns a custom object. At present there is no way to have a valid instance of an "empty" custom object (??) and tell PHP (at least not without calling a method on the object, which requires the developer know more about the object's API). 
 
 In these cases, we often revert to using `null` - either the instance exists and is usable or it doesn't exist - nothing for the potential third option.
 
